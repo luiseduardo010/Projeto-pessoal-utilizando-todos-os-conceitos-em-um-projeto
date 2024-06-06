@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./src/css/style.css">
+    <link rel="stylesheet" href="./src/css/menu.css">
+    <script src="./script.js" defer></script>
+    <title>Sistema de Vendas DRM</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html">Página Inicial</a>
+            <a href="crediario.html">Crediário</a>
+        </div>
+    </header><br>
+    <div class="tudo">
+        <div class="pedidos">
+            <label for="name">Digite o nome do cliente: </label>
+            <input type="text" name="name" id="name" placeholder="Digite o nome"><br>
+        </div>
+        <br>
+        <div class="seleção">
+            <label for="Turm">Selecione a Turma:</label>
+            <select name="Turm" id="Turm">
+                <option selected disabled> Selecione a série</option>
+                <option value="1º ADM">1º ADM</option>
+                <option value="1º DS">1º DS</option>
+                <option value="1º FIN">1º FIN</option>
+                <option value="1º REDES">1º REDES</option>
+                <option value="2º ADM">2º ADM</option>
+                <option value="2º DS">2º DS</option>
+                <option value="2º FIN">2º FIN</option>
+                <option value="3º ADM">3º ADM</option>
+                <option value="3º DS">3º DS</option>
+            </select>
+        </div><br>
+
+        <label for="Typefood">Tipo de Comida:</label>
+        <select name="Typefood" id="Typefood">
+            <option selected disabled> Selecione uma opção...</option>
+            <option value="Brownie">Brownie</option>
+            <option value="Brigadeiro">Brigadeiro</option>
+            <option value="Fatia de Bolo">Fatia de Bolo</option>
+            <option value="Mousse">Mousse</option>
+            <option value="Torta de Frango">Torta de Frango</option>
+            <option value="Din-din">Din-din</option>
+            <option value="Salgado">Salgado</option>
+            <option value="Bolo de pote">Bolo de pote</option>
+            <option value="Combo (Salgado + Refrigerante)">Combo (Salgado + Refrigerante)</option>
+            <option value="Trufa">Trufa</option>
+            <option value="Bolo de pote">Bolo de pote</option>
+            <option value="Surpresa de Uva">Surpresa de Uva</option>
+            <option value="Pirulito de Wafer">Pirulito de Wafer</option>
+            <option value="Din-din gourmet">Din-din gourmet</option>
+        </select>
+        <br>
+
+        <label for="number">Quantidade: </label>
+        <input type="number" name="number" id="number" min="1" max="99">
+        <br>
+
+        <div class="valor">
+            <label for="valor">Valor Total R$:</label>
+            <input type="text" name="valor" id="valor" onKeyPress="return(MascaraMoeda(this,'.',',',event))"> 
+        </div>  
+
+        <label for="Pag">Forma de Pagamento:</label>
+        <select name="Pag" id="Pag">
+            <option selected disabled> Selecione a forma de pagamento</option>
+            <option value="Espécie">Espécie</option>
+            <option value="Pix">Pix</option>
+        </select>
+        </div><br>
+
+        <form>
+            <button type="button" onclick="fiado()" >Crediário</button>
+            <button type="button" onclick="fazervenda()" >Finalizar!</button>
+        </form>
+    </div><br>
+
+
+    <div class="lista">
+        <h2>Vendas:</h2><br>
+        <ul id="list2">
+            
+        </ul>
+    </div><br>
+
+</body>
+</html>
