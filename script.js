@@ -1,138 +1,111 @@
-//preço
-function MascaraMoeda(objTextBox, SeparadorMilesimo, SeparadorDecimal, e){  
-    var sep = 0;  
-    var key = '';  
-    var i = j = 0;  
-    var len = len2 = 0;  
-    var strCheck = '0123456789';  
-    var aux = aux2 = '';  
-    var whichCode = (window.Event) ? e.which : e.keyCode;  
-    if (whichCode == 13 || whichCode == 8) return true;  
-    key = String.fromCharCode(whichCode); // Valor para o código da Chave  
-    if (strCheck.indexOf(key) == -1) return false; // Chave inválida  
-    len = objTextBox.value.length;  
-    for(i = 0; i < len; i++)  
-        if ((objTextBox.value.charAt(i) != '0') && (objTextBox.value.charAt(i) != SeparadorDecimal)) break;  
-    aux = '';  
-    for(; i < len; i++)  
-        if (strCheck.indexOf(objTextBox.value.charAt(i))!=-1) aux += objTextBox.value.charAt(i);  
-    aux += key;  
-    len = aux.length;  
-    if (len == 0) objTextBox.value = '';  
-    if (len == 1) objTextBox.value = '0'+ SeparadorDecimal + '0' + aux;  
-    if (len == 2) objTextBox.value = '0'+ SeparadorDecimal + aux;  
-    if (len > 2) {  
-        aux2 = '';  
-        for (j = 0, i = len - 3; i >= 0; i--) {  
-            if (j == 3) {  
-                aux2 += SeparadorMilesimo;  
-                j = 0;  
-            }  
-            aux2 += aux.charAt(i);  
-            j++;  
-        }    
-        objTextBox.value = '';  
-        len2 = aux2.length;  
-        for (i = len2 - 1; i >= 0; i--)  
-        objTextBox.value += aux2.charAt(i);  
-        objTextBox.value += SeparadorDecimal + aux.substr(len - 2, len);  
-    }  
-    return false;  
-}  
-//index
+// Classe para representar uma Venda
+class Venda {
+    constructor(name, turm, typeFood, number, pag, valor) {
+        this.name = name;
+        this.turm = turm;
+        this.typeFood = typeFood;
+        this.number = number;
+        this.pag = pag;
+        this.valor = valor;
+    }
+
+    // Método para confirmar e exibir a venda
+    confirmar() {
+        return confirm(`
+        Realizar Venda com o cliente ${this.name},
+        com a Turma ${this.turm}
+        com a comida ${this.typeFood}
+        com a Quantidade ${this.number}
+        com o Valor ${this.valor}
+        com a forma de Pagamento ${this.pag}?`);
+    }
+
+    // Método para gerar o item da lista
+    gerarItem() {
+        return `${this.name}: ${this.turm} ${this.typeFood} ${this.number} ${this.valor} ${this.pag}`;
+    }
+}
+
+// Classe para gerenciar a aplicação
+class VendaManager {
+    constructor() {
+        this.vendas = [];
+        this.listElement = document.getElementById('list2');
+    }
+
+    // Método para adicionar uma venda
+    adicionarVenda(venda) {
+        if (venda.confirmar()) {
+            this.vendas.push(venda);
+            this.atualizarLista();
+            this.limparCampos();
+        }
+    }
+
+    // Método para atualizar a lista de vendas
+    atualizarLista() {
+        this.listElement.innerHTML = ''; // Limpa a lista existente
+        this.vendas.forEach((venda, index) => {
+            const playerItem = document.createElement('li');
+            playerItem.id = `player-${index}`;
+            playerItem.innerHTML = venda.gerarItem();
+            this.listElement.appendChild(playerItem);
+        });
+    }
+
+    // Método para limpar os campos de entrada
+    limparCampos() {
+        document.getElementById('name').value = '';
+        document.getElementById('Turm').value = '';
+        document.getElementById('Typefood').value = '';
+        document.getElementById('number').value = '';
+        document.getElementById('valor').value = '';
+        document.getElementById('Pag').value = '';
+    }
+}
+
+// Instancia o gerenciador de vendas
+const vendaManager = new VendaManager();
+
+// Função para fazer a venda
 function fazervenda() {
-    const name = document.getElementById('name').value
-    const Turm = document.getElementById('Turm').value
-    const Typefood = document.getElementById('Typefood').value
-    const number = document.getElementById('number').value
-    const Pag = document.getElementById('Pag').value
+    const name = document.getElementById('name').value;
+    const turm = document.getElementById('Turm').value;
+    const typeFood = document.getElementById('Typefood').value;
+    const number = document.getElementById('number').value;
+    const valor = document.getElementById('valor').value;
+    const pag = document.getElementById('Pag').value;
 
-    const confirmation = confirm(`
-    Realizar Venda com o cliente ${name},
-    com a Turma ${Turm}
-    com a comida ${Typefood}
-    com a Quantidade ${number}
-    com a forma de Pagamento ${Pag}?`
-    )
-
-    if (confirmation) {
-        const list = document.getElementById('list2')
-        const playerItem = document.createElement('li')
-
-        playerItem.id = 'player-' + number
-        playerItem.innerHTML = `${name}: ${Turm} ${Typefood} ${number} ${Pag}`
-
-        list.appendChild(playerItem)
-
-        document.getElementById('name').value = ''
-        document.getElementById('Turm').value = ''
-        document.getElementById('Typefood').value = ''
-        document.getElementById('number').value = ''
-        document.getElementById('Pag').value = ''
-    }
+    const novaVenda = new Venda(name, turm, typeFood, valor, number, pag);
+    vendaManager.adicionarVenda(novaVenda);
 }
 
+// Função para realizar uma venda "fiado"
 function fiado() {
-    const name = document.getElementById('name').value
-    const Turm = document.getElementById('Turm').value
-    const Typefood = document.getElementById('Typefood').value
-    const number = document.getElementById('number').value
-    const valor = document.getElementById('valor').value
-    const Pag = document.getElementById('Pag').value
+    const name = document.getElementById('name').value;
+    const turm = document.getElementById('Turm').value;
+    const typeFood = document.getElementById('Typefood').value;
+    const number = document.getElementById('number').value;
+    const valor = document.getElementById('valor').value;
+    const pag = document.getElementById('Pag').value;
 
-    const confirmation = confirm(`
-    Realizar Venda com o cliente ${name},
-    com a Turma ${Turm}
-    com a comida ${Typefood}
-    com a Quantidade ${number}
-    com o valor ${valor}
-    com a forma de Pagamento ${Pag}?`
-    )
-
-    if (confirmation) {
-        const list = document.getElementById('team-list')
-        const playerItem = document.createElement('li')
-
-        playerItem.id = 'player-' + number
-        playerItem.innerHTML = 
-        `Nome: ${name} 
-        Turma: ${Turm} 
-        Comida: ${Typefood} 
-        Quantidade: ${number} 
-        Pagamento: ${Pag}`
-
-        list.appendChild(playerItem)
-
-        document.getElementById('name').value = ''
-        document.getElementById('Turm').value = ''
-        document.getElementById('Typefood').value = ''
-        document.getElementById('number').value = ''
-        document.getElementById('Pag').value = ''
-    }
-
+    const novaVendaFiado = new Venda(name, turm, typeFood, number, pag, valor);
+    vendaManager.adicionarVenda(novaVendaFiado);
 }
 
+// Função para pagar pendência
 function pagarpendencia() {
-    const list = document.getElementById('list2')
-    const playerItem = document.createElement('li')
-    const name = document.getElementById('name').value
-    const number = document.getElementById('Pagar').value
-    const valor = document.getElementById('valor').value
-    const Pagar = document.getElementById('player-' + number)
+    const name = document.getElementById('name').value;
+    const number = document.getElementById('Pagar').value;
+    const Pagar = document.getElementById(`player-${number}`);
 
-    const confirmation = confirm(`
-    Pagar a conta de ${name.innerText}
-    com o valor de ${number.innerText}?`)
-
-    if (confirmation) {
-        playerItem.id = 'player-' + number
-        playerItem.innerHTML = `${name}: ${Turm} ${Typefood} ${number} ${Pag}`
-
-        list.appendChild(playerItem)
-
-        document.getElementById('team-list').removeChild(Pagar)
-        document.getElementById('list2').addChild(Pagar)
-        document.getElementById('Pagar').value = ''
+    if (Pagar) {
+        const confirmation = confirm(`Pagar a conta de ${name}?`);
+        if (confirmation) {
+            vendaManager.listElement.removeChild(Pagar);
+            alert('Pagamento realizado com sucesso!');
+        }
+    } else {
+        alert('Venda não encontrada!');
     }
 }
-
